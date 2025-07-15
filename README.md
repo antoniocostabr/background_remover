@@ -4,9 +4,13 @@
 
 A powerful and easy-to-use FastAPI application for removing backgrounds from images. This API leverages the `rembg` library to provide high-quality background removal, with options to add a solid background color and center the main object.
 
+This tool is a great fit for e-commerce platforms, product showcases, and any application that requires clean, professional-looking images. For best results, it is recommended to use images with a single-color, opaque background.
+
+
 ## Table of Contents
 
 - [Features](#features)
+- [Example](#example)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -27,7 +31,7 @@ A powerful and easy-to-use FastAPI application for removing backgrounds from ima
 ## Features
 
 -   **High-Quality Background Removal**: Utilizes `rembg` for seamless background removal.
--   **Customizable Backgrounds**: Option to add a white or black background to the processed image.
+-   **Customizable Backgrounds**: Option to add a white background to the processed image (jpg ouput will either have a black or white, while png a white or transparent one).
 -   **Object Centering**: Automatically centralizes the main object within a padded frame (5% margin).
 -   **API Key Authentication**: Secure your API endpoint with API key authentication.
 -   **Dockerized**: Comes with a `Dockerfile` and `Makefile` for easy containerization and deployment.
@@ -161,7 +165,7 @@ You must include your API key in the `X-API-Key` header for all requests.
 | ---------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `file`                 | File    | **Required.** The image file to process.                                                                                               | N/A                      |
 | `filename`             | String  | The desired output filename. The extension determines the output format (e.g., `.png`, `.jpg`).                                        | `background_removed.jpg` |
-| `add_white_background` | Boolean | If `True`, adds a white background. If `False`, the background is transparent (for PNGs) or black (for JPEGs).                         | `True`                   |
+| `add_white_background` | Boolean | If `True`, adds a white background. If `False`, the default background is transparent (for PNGs) or black (for JPEGs).                 | `True`                   |
 | `centralize_object`    | Boolean | If `True`, centralizes the object with a 5% margin. If `False`, the object is placed at the top-left.                                  | `True`                   |
 | `foreground_thresh`    | Integer | A value from 0 to 255 to threshold the foreground matte.                                                                               | `240`                    |
 | `background_thresh`    | Integer | A value from 0 to 255 to threshold the background matte.                                                                               | `10`                     |
