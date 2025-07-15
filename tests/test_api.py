@@ -5,18 +5,20 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Define the API endpoint
-url = "http://127.0.0.1:8000/remove-background/"
+url = "http://localhost:8000/remove-background/"
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+if BASE_DIR not in os.sys.path:
+    os.sys.path.append(BASE_DIR)
 
 # Define the image to be processed
-image_path = "images/MSSADDLOCS03112024DA-01.jpg"
-#image_path = "images/MSSADDLOCS03112024DA-05.jpg"
-#image_path = "images/pessoa.jpeg"
-#image_path = "images/caneca.jpeg"
+image_path = os.path.join(BASE_DIR, "tests", "input", "test_input.jpg")
 
 API_KEY = os.getenv("API_KEY")
 
 def test_background_removal(api_key: str, add_white_background: bool, output_filename: str, centralize_object: bool = True):
-    output_path = os.path.join("images", output_filename)
+    output_path = os.path.join("tests", "output", output_filename)
 
     # Open the image file
     with open(image_path, "rb") as f:

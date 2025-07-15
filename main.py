@@ -9,6 +9,11 @@ import io
 import os
 from typing import Optional, Tuple
 
+# Adding the base directory to sys.path
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if BASE_DIR not in os.sys.path:
+    os.sys.path.append(BASE_DIR)
+
 # ----------------------------------------------------------------------
 # Helpers
 # ----------------------------------------------------------------------
@@ -130,7 +135,7 @@ async def remove_background(
         filename = f"{name}.jpg"
         ext = ".jpg"
 
-    temp_file_path = os.path.join('temp', f"temp_processed_image{ext}")
+    temp_file_path = os.path.join(BASE_DIR, 'temp', f"temp_processed_image{ext}")
 
     # 3) Load into PIL
     img = Image.open(io.BytesIO(output_image_data))
