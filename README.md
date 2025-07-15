@@ -1,92 +1,136 @@
 # Background Remover API
 
-This project provides a FastAPI application to remove the background from images using the `rembg` library. It offers an API endpoint to upload an image and receive the processed image with its background removed, with options for adding a white or black background, and centralizing the main object.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A powerful and easy-to-use FastAPI application for removing backgrounds from images. This API leverages the `rembg` library to provide high-quality background removal, with options to add a solid background color and center the main object.
+
+## Table of Contents
+
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Docker (Recommended)](#docker-recommended)
+  - [Local Setup](#local-setup)
+- [Running the Application](#running-the-application)
+  - [With Docker](#with-docker)
+  - [Locally](#locally)
+- [API Usage](#api-usage)
+  - [Endpoint](#endpoint)
+  - [Authentication](#authentication)
+  - [Parameters](#parameters)
+  - [Example with `curl`](#example-with-curl)
+  - [Example with Python `requests`](#example-with-python-requests)
+- [Testing](#testing)
+- [License](#license)
 
 ## Features
 
-- Remove image background.
-- Add a white or black background to the processed image.
-- Centralize the main object within a padded frame (5% margin).
-- API Key authentication for secure access.
+-   **High-Quality Background Removal**: Utilizes `rembg` for seamless background removal.
+-   **Customizable Backgrounds**: Option to add a white or black background to the processed image.
+-   **Object Centering**: Automatically centralizes the main object within a padded frame (5% margin).
+-   **API Key Authentication**: Secure your API endpoint with API key authentication.
+-   **Dockerized**: Comes with a `Dockerfile` and `Makefile` for easy containerization and deployment.
 
-## Setup
+## Project Structure
+
+```
+/
+├── .dockerignore
+├── .gitignore
+├── Dockerfile
+├── LICENSE
+├── main.py
+├── Makefile
+├── README.md
+├── requirements.txt
+├── temp/
+└── tests/
+    ├── test_api.py
+    ├── input/
+    └── output/
+```
+
+## Getting Started
+
+Follow these instructions to get the application up and running.
 
 ### Prerequisites
 
-- Python 3.11+
-- `pip` (Python package installer)
-- `uvicorn` (ASGI server for FastAPI)
-- `Docker` (optional, for containerized deployment)
+-   Python 3.11+
+-   `pip` and `venv`
+-   `make` (optional, for using Makefile shortcuts)
+-   `Docker` (optional, for containerized deployment)
 
-### Local Installation
+### Docker (Recommended)
+
+This is the easiest way to get the application running.
 
 1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/antoniocostabr/background_remover.git
+    cd background_remover
+    ```
 
+2.  **Set up your API Key:**
+    Create a `.env` file in the root directory. This file will store your API key.
+    ```bash
+    # Generate a secure API key
+    python -c "import secrets; print(f'API_KEY={secrets.token_urlsafe(32)}')" > .env
+    ```
+    Your `.env` file should now contain a line like `API_KEY="your_strong_api_key_here"`.
+
+3.  **Build and Run with Makefile:**
+    Use the provided `Makefile` to build and run the Docker container in one step:
+    ```bash
+    make build-run-docker
+    ```
+    Alternatively, you can run the steps separately:
+    ```bash
+    # Build the image
+    make build-docker
+
+    # Run the container
+    make run-docker
+    ```
+
+### Local Setup
+
+1.  **Clone the repository:**
     ```bash
     git clone https://github.com/antoniocostabr/background_remover.git
     cd background_remover
     ```
 
 2.  **Create and activate a virtual environment:**
-
     ```bash
     python -m venv venv
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     ```
 
 3.  **Install dependencies:**
-
     ```bash
     pip install -r requirements.txt
     ```
 
 4.  **Set up your API Key:**
-
-    Create a `.env` file in the root directory of the project and add your API key:
-
-    ```dotenv
-    API_KEY="your_strong_api_key_here"
-    ```
-
-    You can generate a strong API key using Python:
-
-    ```bash
-    python -c "import secrets; print(secrets.token_urlsafe(32))"
-    ```
-
-### Docker Installation (Recommended)
-
-1.  **Build the Docker image:**
-
-    Navigate to the project root directory and run:
-
-    ```bash
-    docker build -t background-remover .
-    ```
-
-2.  **Run the Docker container:**
-
-    ```bash
-    docker run -p 8000:8000 --env API_KEY='your_strong_api_key_here' background-remover
-    ```
-
-    Replace `'your_strong_api_key_here'` with your actual API key.
+    Create a `.env` file as described in the Docker setup section.
 
 ## Running the Application
 
+### With Docker
+
+If you followed the Docker setup, the application should already be running and accessible at `http://localhost:8000`.
+
 ### Locally
 
-Make sure your virtual environment is activated and your `.env` file is set up.
+Ensure your virtual environment is activated and the `.env` file is present.
 
 ```bash
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
 The API will be accessible at `http://127.0.0.1:8000`.
-
-### With Docker
-
-If you followed the Docker installation steps, the application should already be running after executing the `docker run` command.
 
 ## API Usage
 
@@ -96,18 +140,22 @@ The API provides a single endpoint for background removal.
 
 `POST /remove-background/`
 
-### Parameters
-
--   **`file`** (File, required): The image file to process.
--   **`filename`** (Form, optional): The desired output filename for the processed image. Defaults to `background_removed.jpg`.
--   **`add_white_background`** (Form, optional): Boolean. If `True`, a white background is added. If `False`, the image will have a transparent background (PNG output) or a black background (JPG output). Defaults to `True`.
--   **`centralize_object`** (Form, optional): Boolean. If `True`, the main object will be centralized within a padded frame (5% margin). If `False`, the object will be pasted at the top-left corner. Defaults to `True`.
-
 ### Authentication
 
-Include your API key in the `X-API-Key` header for all requests.
+You must include your API key in the `X-API-Key` header for all requests.
 
-### Example Request (using `curl`)
+### Parameters
+
+| Parameter              | Type    | Description                                                                                                                            | Default                  |
+| ---------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `file`                 | File    | **Required.** The image file to process.                                                                                               | N/A                      |
+| `filename`             | String  | The desired output filename. The extension determines the output format (e.g., `.png`, `.jpg`).                                        | `background_removed.jpg` |
+| `add_white_background` | Boolean | If `True`, adds a white background. If `False`, the background is transparent (for PNGs) or black (for JPEGs).                           | `True`                   |
+| `centralize_object`    | Boolean | If `True`, centralizes the object with a 5% margin. If `False`, the object is placed at the top-left.                                    | `True`                   |
+| `foreground_thresh`    | Integer | A value from 0 to 255 to threshold the foreground matte.                                                                                | `240`                    |
+| `background_thresh`    | Integer | A value from 0 to 255 to threshold the background matte.                                                                                | `10`                     |
+
+### Example with `curl`
 
 ```bash
 curl -X POST "http://127.0.0.1:8000/remove-background/" \
@@ -119,14 +167,48 @@ curl -X POST "http://127.0.0.1:8000/remove-background/" \
   --output processed_image.png
 ```
 
-Replace `/path/to/your/image.jpg` with the actual path to your image file and `your_strong_api_key_here` with your API key.
+### Example with Python `requests`
 
-## Running Tests
+```python
+import requests
+import os
 
-To run the test suite, ensure your virtual environment is activated and the API is running (either locally or via Docker).
+# It's recommended to load the API key from environment variables
+api_key = os.getenv("API_KEY", "your_strong_api_key_here")
+api_url = "http://127.0.0.1:8000/remove-background/"
+image_path = "/path/to/your/image.jpg"
 
-```bash
-python test_api.py
+headers = {"X-API-Key": api_key}
+files = {"file": (os.path.basename(image_path), open(image_path, "rb"), "image/jpeg")}
+data = {
+    "filename": "my_processed_image.png",
+    "add_white_background": "false",
+    "centralize_object": "true",
+}
+
+response = requests.post(api_url, headers=headers, files=files, data=data)
+
+if response.status_code == 200:
+    with open("processed_image.png", "wb") as f:
+        f.write(response.content)
+    print("Image processed successfully!")
+else:
+    print(f"Error: {response.status_code} - {response.text}")
 ```
 
-This will send requests to the running API and save the processed images in the `images/` directory.
+## Testing
+
+The project includes an integration test script that calls the running API to verify its functionality.
+
+1.  **Ensure the application is running** (either locally or with Docker).
+2.  **Make sure your `.env` file is configured**, as the test script uses the `API_KEY` from it.
+3.  **Run the test script:**
+    ```bash
+    python tests/test_api.py
+    ```
+
+The script will send several requests with different parameters to the API. The processed images will be saved in the `tests/output/` directory. You can inspect these files to verify the results.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
