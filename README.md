@@ -32,6 +32,13 @@ A powerful and easy-to-use FastAPI application for removing backgrounds from ima
 -   **API Key Authentication**: Secure your API endpoint with API key authentication.
 -   **Dockerized**: Comes with a `Dockerfile` and `Makefile` for easy containerization and deployment.
 
+## Example
+
+| Input Image | Output Image |
+| :---: | :---: |
+| ![Input Image](docs/images/input.jpg) | ![Output Image](docs/images/output.jpg) |
+
+
 ## Project Structure
 
 ```
@@ -44,6 +51,10 @@ A powerful and easy-to-use FastAPI application for removing backgrounds from ima
 ├── Makefile
 ├── README.md
 ├── requirements.txt
+├── docs/
+│   └── images/
+│       ├── input.jpg
+│       └── output.jpg
 ├── temp/
 └── tests/
     ├── test_api.py
