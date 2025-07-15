@@ -40,7 +40,7 @@ This tool is a great fit for e-commerce platforms, product showcases, and any ap
 
 | Input Image | Output Image |
 | :---: | :---: |
-| ![Input Image](docs/images/input.jpg) | ![Output Image](docs/images/output.jpg) |
+| <img src="docs/images/input.jpg" alt="Input Image" style="border: 2px solid blue;"> | <img src="docs/images/output.jpg" alt="Output Image" style="border: 2px solid green;"> |
 
 
 ## Project Structure
