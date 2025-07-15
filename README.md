@@ -150,21 +150,25 @@ You must include your API key in the `X-API-Key` header for all requests.
 | ---------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `file`                 | File    | **Required.** The image file to process.                                                                                               | N/A                      |
 | `filename`             | String  | The desired output filename. The extension determines the output format (e.g., `.png`, `.jpg`).                                        | `background_removed.jpg` |
-| `add_white_background` | Boolean | If `True`, adds a white background. If `False`, the background is transparent (for PNGs) or black (for JPEGs).                           | `True`                   |
-| `centralize_object`    | Boolean | If `True`, centralizes the object with a 5% margin. If `False`, the object is placed at the top-left.                                    | `True`                   |
-| `foreground_thresh`    | Integer | A value from 0 to 255 to threshold the foreground matte.                                                                                | `240`                    |
-| `background_thresh`    | Integer | A value from 0 to 255 to threshold the background matte.                                                                                | `10`                     |
+| `add_white_background` | Boolean | If `True`, adds a white background. If `False`, the background is transparent (for PNGs) or black (for JPEGs).                         | `True`                   |
+| `centralize_object`    | Boolean | If `True`, centralizes the object with a 5% margin. If `False`, the object is placed at the top-left.                                  | `True`                   |
+| `foreground_thresh`    | Integer | A value from 0 to 255 to threshold the foreground matte.                                                                               | `240`                    |
+| `background_thresh`    | Integer | A value from 0 to 255 to threshold the background matte.                                                                               | `10`                     |
 
 ### Example with `curl`
 
 ```bash
-curl -X POST "http://127.0.0.1:8000/remove-background/" \
-  -H "X-API-Key: your_strong_api_key_here" \
-  -F "file=@/path/to/your/image.jpg" \
-  -F "filename=my_processed_image.png" \
-  -F "add_white_background=false" \
-  -F "centralize_object=true" \
-  --output processed_image.png
+curl -X 'POST' \
+  'http://localhost:8000/remove-background/' \
+  -H 'accept: application/json' \
+  -H 'X-API-Key: your_strong_api_key_here' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@caneca.jpeg;type=image/jpeg' \
+  -F 'filename=background_removed.jpg' \
+  -F 'add_white_background=true' \
+  -F 'centralize_object=true' \
+  -F 'foreground_thresh=240' \
+  -F 'background_thresh=10'
 ```
 
 ### Example with Python `requests`
